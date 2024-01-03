@@ -5,7 +5,9 @@ import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yxl.userphotosapp.databinding.ActivityEntryBinding
 import com.yxl.userphotosapp.entry.adapters.PagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EntryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEntryBinding

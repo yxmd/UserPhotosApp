@@ -7,17 +7,20 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.yxl.userphotosapp.main.adapters.CommentsPagingSource
 import com.yxl.userphotosapp.main.adapters.PhotosPagingSource
-import com.yxl.userphotosapp.main.data.PhotosRepository
 import com.yxl.userphotosapp.core.db.photo.PhotoEntity
+import com.yxl.userphotosapp.main.data.PhotosRepositoryImpl
 import com.yxl.userphotosapp.main.model.ImageDtoIn
 import com.yxl.userphotosapp.main.model.PhotoResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PhotosViewModel(
-    private val repository: PhotosRepository
+@HiltViewModel
+class PhotosViewModel @Inject constructor(
+    private val repository: PhotosRepositoryImpl
 ) : ViewModel() {
 
     private val _token = MutableStateFlow("")

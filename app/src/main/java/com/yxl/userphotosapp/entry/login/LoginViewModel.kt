@@ -1,12 +1,12 @@
 package com.yxl.userphotosapp.entry.login
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yxl.userphotosapp.core.Result
-import com.yxl.userphotosapp.entry.data.EntryRepository
+import com.yxl.userphotosapp.entry.data.EntryRepositoryImpl
 import com.yxl.userphotosapp.entry.model.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
-    private val repository: EntryRepository
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository: EntryRepositoryImpl
 ): ViewModel() {
 
     private val _login = MutableStateFlow("")
@@ -47,20 +49,16 @@ class LoginViewModel(
                 when(it){
                     is Result.Error -> {
                         _showErrorToastChannel.send(true)
-                        Log.d("errorViewModel", it.data.toString())
                     }
                     is Result.Success -> {
                         it.data?.let {user ->
                             token.postValue(user.data.token)
-                            Log.d("loginViewmodel", user.toString())
-
                         }
 
                     }
                 }
             }
         }
-        Log.d("loginViewmodel", token.value.toString())
 
     }
 }
