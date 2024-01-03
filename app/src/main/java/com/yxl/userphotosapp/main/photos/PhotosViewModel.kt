@@ -7,7 +7,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.yxl.userphotosapp.main.adapters.CommentsPagingSource
 import com.yxl.userphotosapp.main.adapters.PhotosPagingSource
-import com.yxl.userphotosapp.core.db.photo.PhotoEntity
+import com.yxl.userphotosapp.core.db.entity.PhotoEntity
 import com.yxl.userphotosapp.main.data.PhotosRepositoryImpl
 import com.yxl.userphotosapp.main.model.ImageDtoIn
 import com.yxl.userphotosapp.main.model.PhotoResponse

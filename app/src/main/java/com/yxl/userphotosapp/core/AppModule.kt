@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.yxl.userphotosapp.core.Api.Companion.BASE_URL
 import com.yxl.userphotosapp.core.db.PhotoDatabase
-import com.yxl.userphotosapp.core.db.photo.PhotoDAO
+import com.yxl.userphotosapp.core.db.dao.PhotoDAO
 import com.yxl.userphotosapp.entry.data.EntryRepositoryImpl
 import com.yxl.userphotosapp.main.data.PhotosRepositoryImpl
 import dagger.Module
@@ -25,7 +25,7 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             PhotoDatabase::class.java,
-            "photo_db"
+            PhotoDatabase.DATABASE_NAME
         ).build()
     }
 

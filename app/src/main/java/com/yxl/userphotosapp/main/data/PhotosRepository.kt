@@ -3,7 +3,7 @@ package com.yxl.userphotosapp.main.data
 import com.yxl.userphotosapp.main.model.PhotoResponse
 import kotlinx.coroutines.flow.Flow
 import com.yxl.userphotosapp.core.Result
-import com.yxl.userphotosapp.core.db.photo.PhotoEntity
+import com.yxl.userphotosapp.core.db.entity.PhotoEntity
 import com.yxl.userphotosapp.main.model.Comment
 import com.yxl.userphotosapp.main.model.Comments
 import com.yxl.userphotosapp.main.model.ImageDtoIn
