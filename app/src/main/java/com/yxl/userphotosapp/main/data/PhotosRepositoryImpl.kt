@@ -13,13 +13,19 @@ import com.yxl.userphotosapp.main.model.ImageDtoIn
 import com.yxl.userphotosapp.main.model.PhotosResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PhotosRepositoryImpl(private val photoDAO: PhotoDAO) : PhotosRepository {
+@Singleton
+class PhotosRepositoryImpl @Inject constructor(
+    private val photoDAO: PhotoDAO,
+    private val api: Api
+) : PhotosRepository {
 
     override suspend fun getPhotos(page: Int, token: String): Flow<Result<PhotosResponse>> {
-        val resp = Api().getPhotos(token, page)
-        return if(resp.isSuccessful){
-            flow{
+        val resp = api.getPhotos(token, page)
+        return if (resp.isSuccessful) {
+            flow {
                 resp.body()?.data?.let {
                     val photos = it.map { photo ->
                         PhotoEntity(
@@ -30,45 +36,45 @@ class PhotosRepositoryImpl(private val photoDAO: PhotoDAO) : PhotosRepository {
                             photo.lng
                         )
                     }
-                    withContext(Dispatchers.IO){
+                    withContext(Dispatchers.IO) {
                         photoDAO.insertPhotos(photos)
                     }
                 }
 
                 emit(Result.Success(resp.body()))
             }
-        }else{
-            flow{
+        } else {
+            flow {
                 emit(Result.Error(message = resp.message()))
             }
         }
     }
 
-    override fun getPhotosFromDb(): Flow<List<PhotoEntity>>{
+    override fun getPhotosFromDb(): Flow<List<PhotoEntity>> {
         return photoDAO.getPhotos()
     }
 
     override suspend fun postPhoto(img: ImageDtoIn, token: String): Flow<Result<PhotoResponse>> {
-        val resp = Api().postPhoto(token, img)
-        return if(resp.isSuccessful){
-            flow{
+        val resp = api.postPhoto(token, img)
+        return if (resp.isSuccessful) {
+            flow {
                 emit(Result.Success(resp.body()))
             }
-        }else{
-            flow{
+        } else {
+            flow {
                 emit(Result.Error(message = resp.message()))
             }
         }
     }
 
     override suspend fun deletePhoto(token: String, imageId: Int): Flow<Result<PhotoResponse>> {
-        val resp = Api().deletePhoto(token, imageId)
-        return if(resp.isSuccessful){
-            flow{
+        val resp = api.deletePhoto(token, imageId)
+        return if (resp.isSuccessful) {
+            flow {
                 emit(Result.Success(resp.body()))
             }
-        }else{
-            flow{
+        } else {
+            flow {
                 emit(Result.Error(message = resp.message()))
             }
         }
@@ -79,13 +85,13 @@ class PhotosRepositoryImpl(private val photoDAO: PhotoDAO) : PhotosRepository {
         imageId: Int,
         page: Int
     ): Flow<Result<Comments>> {
-        val resp = Api().getComments(token, imageId, page)
-        return if(resp.isSuccessful){
+        val resp = api.getComments(token, imageId, page)
+        return if (resp.isSuccessful) {
             flow {
                 emit(Result.Success(resp.body()))
             }
-        }else{
-            flow{
+        } else {
+            flow {
                 emit(Result.Error(message = resp.message()))
             }
         }
@@ -96,13 +102,13 @@ class PhotosRepositoryImpl(private val photoDAO: PhotoDAO) : PhotosRepository {
         commentDtoIn: String,
         imageId: Int
     ): Flow<Result<Comment>> {
-        val resp = Api().postComment(token, commentDtoIn, imageId)
-        return if(resp.isSuccessful){
+        val resp = api.postComment(token, commentDtoIn, imageId)
+        return if (resp.isSuccessful) {
             flow {
                 emit(Result.Success(resp.body()))
             }
-        }else{
-            flow{
+        } else {
+            flow {
                 emit(Result.Error(message = resp.message()))
             }
         }

@@ -8,7 +8,6 @@ import com.yxl.userphotosapp.main.model.ImageDtoIn
 import com.yxl.userphotosapp.main.model.PhotoResponse
 import com.yxl.userphotosapp.main.model.PhotosResponse
 import retrofit2.Response
-import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -65,13 +64,8 @@ interface Api {
     ): Response<Comment>
 
     companion object{
-        operator fun invoke() : Api {
-            return Retrofit.Builder()
-                .baseUrl("https://junior.balinasoft.com/")
-                .addConverterFactory(ApiWorker.gsonConverter)
-                .client(ApiWorker.client)
-                .build()
-                .create(Api::class.java)
-        }
+
+        const val BASE_URL = "https://junior.balinasoft.com/"
+
     }
 }

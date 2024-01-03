@@ -16,43 +16,29 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.yxl.userphotosapp.core.Utils
 import com.yxl.userphotosapp.databinding.FragmentPhotosBinding
 import com.yxl.userphotosapp.main.PhotoActivity
 import com.yxl.userphotosapp.main.adapters.PhotosAdapter
-import com.yxl.userphotosapp.main.data.PhotosRepositoryImpl
-import com.yxl.userphotosapp.core.db.PhotoDatabase
 import com.yxl.userphotosapp.main.model.ImageDtoIn
 import com.yxl.userphotosapp.main.model.PhotoResponse
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@Suppress("UNCHECKED_CAST")
+@AndroidEntryPoint
 class PhotosFragment : Fragment() {
 
     private lateinit var binding: FragmentPhotosBinding
     private var photoBitmap: Bitmap? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var lastKnownLocation: Location? = null
-    private val viewModel by viewModels<PhotosViewModel>(factoryProducer = {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PhotosViewModel(PhotosRepositoryImpl(db.photoDao())) as T
-            }
-        }
-    },
-        ownerProducer = { requireActivity() })
-    private val db by lazy {
-        Room.databaseBuilder(requireContext(), PhotoDatabase::class.java, "photos.db").build()
-    }
+    val viewModel by viewModels<PhotosViewModel>(ownerProducer = { requireActivity() })
     private lateinit var photosAdapter: PhotosAdapter
 
     override fun onCreateView(

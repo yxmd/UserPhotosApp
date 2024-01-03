@@ -12,7 +12,9 @@ import com.yxl.userphotosapp.R
 import com.yxl.userphotosapp.databinding.ActivityPhotoBinding
 import com.yxl.userphotosapp.main.map.MapFragment
 import com.yxl.userphotosapp.main.photos.PhotosFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PhotoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var binding: ActivityPhotoBinding

@@ -7,39 +7,26 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import coil.load
 import coil.size.Scale
 import com.yxl.userphotosapp.R
 import com.yxl.userphotosapp.core.Utils
 import com.yxl.userphotosapp.databinding.FragmentPhotoItemBinding
 import com.yxl.userphotosapp.main.adapters.CommentsAdapter
-import com.yxl.userphotosapp.main.data.PhotosRepositoryImpl
-import com.yxl.userphotosapp.core.db.PhotoDatabase
 import com.yxl.userphotosapp.main.model.PhotoResponse
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@Suppress("UNCHECKED_CAST")
+@AndroidEntryPoint
 class PhotoItemFragment : Fragment() {
 
     private lateinit var binding: FragmentPhotoItemBinding
-    private val viewModel by viewModels<PhotosViewModel>(factoryProducer = {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PhotosViewModel(PhotosRepositoryImpl(db.photoDao())) as T
-            }
-        }
-    }, ownerProducer = { requireActivity() })
+    private val viewModel by viewModels<PhotosViewModel>(ownerProducer = { requireActivity() })
     private lateinit var commentsAdapter: CommentsAdapter
-    private val db by lazy {
-        Room.databaseBuilder(requireContext(), PhotoDatabase::class.java, "photos.db").build()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

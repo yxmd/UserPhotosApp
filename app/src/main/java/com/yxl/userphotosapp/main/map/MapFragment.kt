@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,27 +15,16 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.yxl.userphotosapp.core.Utils
 import com.yxl.userphotosapp.databinding.FragmentMapBinding
-import com.yxl.userphotosapp.main.data.PhotosRepositoryImpl
-import com.yxl.userphotosapp.core.db.PhotoDatabase
 import com.yxl.userphotosapp.main.photos.PhotosViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@Suppress("UNCHECKED_CAST")
+@AndroidEntryPoint
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
     private lateinit var binding: FragmentMapBinding
-    private val db by lazy {
-        Room.databaseBuilder(requireContext(), PhotoDatabase::class.java, "photos.db").build()
-    }
-    private val viewModel by viewModels<PhotosViewModel>(factoryProducer = {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PhotosViewModel(PhotosRepositoryImpl(db.photoDao())) as T
-            }
-        }
-    },
-        ownerProducer = { requireActivity() })
+    private val viewModel by viewModels<PhotosViewModel>(ownerProducer = { requireActivity() })
 
     override fun onCreateView(
         inflater: LayoutInflater,
