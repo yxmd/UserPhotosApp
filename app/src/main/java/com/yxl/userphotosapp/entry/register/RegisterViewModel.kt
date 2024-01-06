@@ -7,6 +7,7 @@ import com.yxl.userphotosapp.core.Result
 import com.yxl.userphotosapp.entry.data.EntryRepositoryImpl
 import com.yxl.userphotosapp.entry.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +36,7 @@ class RegisterViewModel @Inject constructor(
     val token = MutableLiveData("")
 
     fun register() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO)  {
             repository.register(User(_login.value, _repPassword.value)).collect {
                 when (it) {
                     is Result.Error -> {

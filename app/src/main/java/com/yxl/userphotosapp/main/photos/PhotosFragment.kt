@@ -28,8 +28,10 @@ import com.yxl.userphotosapp.main.adapters.PhotosAdapter
 import com.yxl.userphotosapp.main.model.ImageDtoIn
 import com.yxl.userphotosapp.main.model.PhotoResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class PhotosFragment : Fragment() {
@@ -80,7 +82,9 @@ class PhotosFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.photoListPager.collectLatest {
-                    photosAdapter.submitData(it)
+                    withContext(Dispatchers.Main){
+                        photosAdapter.submitData(it)
+                    }
                 }
             }
         }
@@ -129,7 +133,6 @@ class PhotosFragment : Fragment() {
 
     private fun onPhotoClick(photo: PhotoResponse) {
         viewModel.setCurrentPhoto(photo)
-        viewModel.commentListPager
         (activity as? PhotoActivity)?.openFragment(PhotoItemFragment())
     }
 
