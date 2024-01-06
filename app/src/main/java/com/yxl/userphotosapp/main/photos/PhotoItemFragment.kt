@@ -18,8 +18,10 @@ import com.yxl.userphotosapp.databinding.FragmentPhotoItemBinding
 import com.yxl.userphotosapp.main.adapters.CommentsAdapter
 import com.yxl.userphotosapp.main.model.PhotoResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class PhotoItemFragment : Fragment() {
@@ -75,7 +77,9 @@ class PhotoItemFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.commentListPager.collectLatest {
-                    commentsAdapter.submitData(it)
+                    withContext(Dispatchers.Main){
+                        commentsAdapter.submitData(it)
+                    }
                 }
             }
         }

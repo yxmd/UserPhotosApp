@@ -7,6 +7,7 @@ import com.yxl.userphotosapp.core.Result
 import com.yxl.userphotosapp.entry.data.EntryRepositoryImpl
 import com.yxl.userphotosapp.entry.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,7 +45,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.login(User(_login.value, _password.value)).collect{
                 when(it){
                     is Result.Error -> {
